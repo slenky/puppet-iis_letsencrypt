@@ -68,6 +68,9 @@ Contact Email of person for whom cert applies to.
 #### physicalpath
 Physical path on your machine for .well-known virtual directory
 
+Also this module contains custom fact generator for getting SSL thumbprints.
+You could use them as $ssl_ + domain name without dots
+i.e $ssl_examplecom or $ssl_facebookcom
 ## Limitations
 
 Only Windows with Ruby >= 2.1.0
