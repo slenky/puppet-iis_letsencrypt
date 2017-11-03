@@ -1,0 +1,17 @@
+function Get-IISVirDir {
+param (
+    [String]$SiteName,
+    [String]$VDirName
+)
+
+    $iisWebSite = Get-WmiObject -Namespace 'root\MicrosoftIISv2' -Class IISWebServerSetting -Filter "ServerComment = '$SiteName'"
+    if(!$iisWebSite) {
+        throw ("No website with the name `"$SiteName`" exists on this machine")
+    }
+    if ($iisWebSite.Count -gt 1) {
+        throw ("More than one site with the name `"$SiteName`" exists on this machine")
+    }
+
+    return ([System.DirectoryServices.DirectoryEntry]::Exists("IIS://LocalHost/$($iisWebSite.Name)/ROOT/$VDirName"))
+}
+Get-IISVirDir -SiteName '<%= "#{resource[:name]}" %>' -VDirName '<%= ".well-known" %>'

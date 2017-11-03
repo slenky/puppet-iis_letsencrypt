@@ -1,0 +1,22 @@
+function Remove-StoredCert {
+param (
+[String]$CertRootStore = "LocalMachine",
+[String]$CertStore = "My",
+[String]$Thumbprint
+)
+
+    $store = new-object System.Security.Cryptography.X509Certificates.X509Store($CertStore,$CertRootStore)
+    $store.open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadWrite)
+    $oldCert = $store.Certificates | ? {$_.Thumbprint -eq $Thumbprint}
+    if (($oldCert -ne $null) -and ($oldCert -ne "")) {
+        $store.Remove($oldCert)
+        $result = $true
+        }
+    else {
+        Write-Host "Can't find certificate with thumbprint `"$Thumbprint`""
+        $result = $true
+        }
+    $store.Close()
+    return $result
+    }
+Remove-StoredCert -Thumbprint <%= resource[:thumbprint] %>

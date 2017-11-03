@@ -1,0 +1,20 @@
+function Create-IISVirDir {
+param(
+    [String]$SiteName,
+    [String]$VDirName,
+    [String]$VDirPath
+)
+    if (!(Test-Path $VdirPath)) {
+        throw ("Can't create virtual directory `"$VDirName`", as path `"$VdirPath`" doesn't exist")
+        }
+    [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.Web.Administration") | Out-Null
+    $iis = new-object Microsoft.Web.Administration.ServerManager
+    $applicationElement =$iis.Sites[$SiteName].applications[0]
+    $applicationCollection = $applicationElement.GetCollection()
+    $virtualDirectoryElement =$applicationCollection.CreateElement("virtualDirectory")
+    $virtualDirectoryElement["path"] = "/$VDirName"
+    $virtualDirectoryElement["physicalPath"] = "$VdirPath"
+    $applicationCollection.Add($virtualDirectoryElement)
+    $iis.CommitChanges()
+    }
+Create-IISVirDir -SiteName '<%= "#{resource[:name]}" %>' -VDirName '<%= ".well-known" %>' -VDirPath '<%= "#{resource[:physicalpath]}\\.well-known" %>'

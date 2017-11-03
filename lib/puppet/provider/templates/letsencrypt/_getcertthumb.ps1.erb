@@ -1,0 +1,16 @@
+function Load-LocalPfx {
+param (
+[String]$CertPath,
+[String]$CertPass = $null
+)
+    $pfx = new-object System.Security.Cryptography.X509Certificates.X509Certificate2Collection
+    if ($CertPass -ne $null) {
+        $pfx.import($CertPath, $CertPass, "Exportable")
+        }
+    else {
+        $pfx.import($CertPath, "Exportable")
+        }
+    return $pfx
+    $pfx.Clear()
+    }
+Load-LocalPfx -CertPath '<%= "#{resource[:cert_path]}\\#{resource[:domain]}.pfx" %>' -CertPass '<%= "#{resource[:cert_pass]}" %>' | Select-Object -ExpandProperty Thumbprint

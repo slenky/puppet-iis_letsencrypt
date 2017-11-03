@@ -1,0 +1,7 @@
+[System.Reflection.Assembly]::LoadWithPartialName("Microsoft.Web.Administration")
+
+$oIIS = new-object Microsoft.Web.Administration.ServerManager
+$oGlobalConfig = $oIIS.GetApplicationHostConfiguration()
+$oConfig = $oGlobalConfig.GetSection("system.webServer/handlers", '<%= "#{resource[:name]}" %>')
+$oConfig.OverrideMode="Allow"
+$oIIS.CommitChanges()

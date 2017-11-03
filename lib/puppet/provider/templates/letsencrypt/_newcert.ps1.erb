@@ -1,0 +1,2 @@
+$pass = ConvertTo-SecureString '<%= "#{resource[:cert_pass]}" %>' -AsPlainText -Force
+Import-PfxCertificate -Exportable -CertStoreLocation Cert:\LocalMachine\My -FilePath '<%= "#{resource[:cert_path]}\\#{resource[:domain]}.pfx" %>' -Password $pass

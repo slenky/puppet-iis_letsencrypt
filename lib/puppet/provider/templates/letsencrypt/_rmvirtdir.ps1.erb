@@ -1,0 +1,11 @@
+function Remove-IISVirDir {
+param (
+    [String]$SiteName,
+    [String]$VDirName
+)
+    $iisWebSite = Get-WmiObject -Namespace 'root\MicrosoftIISv2' -Class IISWebServerSetting -Filter "ServerComment = '$SiteName'"
+    $iis = new-object System.DirectoryServices.DirectoryEntry("IIS://localhost/" + $iisWebSite.Name + "/Root")
+    $iis.Delete("IIsWebVirtualDir", "$VDirName")
+
+    }
+Remove-IISVirDir -SiteName '<%= "#{resource[:name]}" %>' -VDirName '<%= ".well-known" %>' -VDirPath '<%= "#{resource[:physicalpath]}\\.well-known" %>'    
