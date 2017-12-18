@@ -2,7 +2,7 @@
 require 'puppet/parameter/boolean'
 
 Puppet::Type.newtype(:ssl_cert) do
-  @doc = 'Type representing a virtual machine in Microsoft Azure.'
+  @doc = 'Type representing a handling certificates from Lets Encrypt for Windows IIS'
 
   newproperty(:ensure) do
     desc "Specifies whether a certificate should be issued or not."
